@@ -1,0 +1,17 @@
+<html>
+  <body>
+    <div id="stat"></div>
+  </body>
+  <script>
+    let stat = new URLSearchParams(window.location.search).get("stat");
+    let timeout = new URLSearchParams(window.location.search).get("timeout") || 10000
+
+    setInterval(() => {
+      fetch("http://localhost/" + stat)
+        .then(response => response.json())
+        .then(response => {
+          document.getElementById("stat").innerText = response.stat;
+        });
+    }, timeout);
+  </script>
+</html>

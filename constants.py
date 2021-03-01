@@ -1,0 +1,8 @@
+MOVEMENT_SIT = "sit"
+MOVEMENT_STAND = "stand"
+MOVEMENT_FORWARD = "forward"
+MOVEMENT_BACKWARD = "backward"
+MOVEMENT_TURN_RIGHT = "turn-right"
+MOVEMENT_TURN_LEFT = "turn-left"
+MOVEMENT_STRAFE_RIGHT = "strafe-right"
+MOVEMENT_STRAFE_LEFT = "strafe-left"
