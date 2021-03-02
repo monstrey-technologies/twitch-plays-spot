@@ -1,4 +1,4 @@
-#Twitch plays Spot Robot
+# Twitch plays Spot Robot
 
 ## Purpose
 This code is meant as an example on how to use the python client provided by Boston Dynamic.  
