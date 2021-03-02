@@ -5,3 +5,4 @@ pyyaml~=5.4.1
 numpy~=1.20.1
 opencv-python~=4.5.1.48
 irc~=19.0.1
+coloredlogs~=15.0

@@ -1,12 +1,10 @@
-import json
-import logging
+import logging, coloredlogs
 import threading
 from dataclasses import dataclass
 
 import yaml
 
 from bot import TwitchBot
-from constants import MOVEMENT_SIT
 from message_server import Server
 from spot_handler import Spot
 
@@ -49,15 +47,18 @@ class TwitchPlays:
 
     def activate_spot(self):
         if self.__config is not None:
-            __spot = Spot(self.__config)
-            __spot.connect()
+            self.__spot = Spot(self.__config)
 
-            threading.Thread(target=__spot.image_helper.stream_images).start()
+            def cb():
+                threading.Thread(target=self.__spot.image_helper.stream_images).start()
+                self.__spot.enable_movement()
+
+            threading.Thread(target=self.__spot.connect, args=[cb, True]).start()
         else:
             logging.error("Invalid configuration")
 
     def cb_movement(self, move):
-        if self.__spot:
+        if self.__spot is not None:
             if move == "pause":
                 self.__allow_movement = False
             elif move == "resume":
@@ -65,15 +66,15 @@ class TwitchPlays:
             elif self.__allow_movement:
                 self.__last_move = move
                 return {
-                    MOVEMENT_SIT: self.__spot.movement_helper().sit(),
-                    MOVEMENT_STAND: self.__spot.movement_helper().stand(),
-                    MOVEMENT_FORWARD: self.__spot.movement_helper().forward(),
-                    MOVEMENT_BACKWARD: self.__spot.movement_helper().backward(),
-                    MOVEMENT_TURN_LEFT: self.__spot.movement_helper().rotate_left(),
-                    MOVEMENT_TURN_RIGHT: self.__spot.movement_helper().rotate_right(),
-                    MOVEMENT_STRAFE_LEFT: self.__spot.movement_helper().left(),
-                    MOVEMENT_STRAFE_RIGHT: self.__spot.movement_helper().right()
-                }.get(move, None)
+                    MOVEMENT_SIT: self.__spot.movement_helper.sit,
+                    MOVEMENT_STAND: self.__spot.movement_helper.stand,
+                    MOVEMENT_FORWARD: self.__spot.movement_helper.forward,
+                    MOVEMENT_BACKWARD: self.__spot.movement_helper.backward,
+                    MOVEMENT_TURN_LEFT: self.__spot.movement_helper.rotate_left,
+                    MOVEMENT_TURN_RIGHT: self.__spot.movement_helper.rotate_right,
+                    MOVEMENT_STRAFE_LEFT: self.__spot.movement_helper.left,
+                    MOVEMENT_STRAFE_RIGHT: self.__spot.movement_helper.right
+                }.get(move, lambda: logging.error(f"Invalid move command: {move}"))()
 
         else:
             logging.error(f"Could not trigger {move} since Spot has not been initialised")
@@ -88,11 +89,8 @@ class TwitchPlays:
 
     @staticmethod
     def load_logging_configuration(level):
-        logging.basicConfig(
-            level=level,
-            format='%(asctime)s.%(msecs)03d %(filename)s %(levelname)-8s %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S'
-        )
+        coloredlogs.install(level=level, fmt='%(asctime)s.%(msecs)03d %(levelname)-8s %(filename)-20s %(message)s',
+                            datefmt='%Y-%m-%d %H:%M:%S')
 
     @staticmethod
     def read_yaml():
@@ -116,6 +114,8 @@ def main():
     twitch_plays = TwitchPlays()
 
     twitch_plays.activate_bot()
+    twitch_plays.activate_server()
+    twitch_plays.activate_spot()
 
 
 if __name__ == '__main__':

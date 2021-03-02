@@ -46,7 +46,7 @@ class Spot:
         self.guid = config.guid
         self.secret = config.secret
 
-    def connect(self):
+    def connect(self, cb = None, retry = False):
         self.__sdk = create_standard_sdk(self.app_name)
         try:
             self.__robot = self.__sdk.create_robot(self.hostname)
@@ -56,10 +56,17 @@ class Spot:
             self.__robot.start_time_sync()
 
             self.__preflight()
+            if cb is not None:
+                cb()
         except RpcError:
             logging.error(f"Could not connect with robot using {self.hostname}")
+            if retry:
+                logging.info(f"Retrying using {self.hostname}")
+                self.connect(cb, retry)
         except InvalidPayloadCredentialsError:
             logging.error(f"Invalid guid '{self.guid}' or secret")
+        except Exception as exc:
+            logging.error(exc)
 
     def __preflight(self):
         logging.info("Ensuring clients")
