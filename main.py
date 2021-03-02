@@ -114,9 +114,9 @@ class TwitchPlays:
 def main():
     twitch_plays = TwitchPlays()
 
-    twitch_plays.activate_bot()
-    twitch_plays.activate_server()
-    twitch_plays.activate_spot()
+    twitch_plays.activate_bot()  # activate twitch bot
+    twitch_plays.activate_server()  # activate message server (for OBS)
+    twitch_plays.activate_spot()  # activate Spot handler
 
 
 if __name__ == '__main__':

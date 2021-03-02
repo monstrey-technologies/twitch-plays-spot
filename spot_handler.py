@@ -103,7 +103,7 @@ class Spot:
             logging.info("Powering motors")
             power.power_on(self.__power_client)
         except BatteryMissingError:
-            logging.error("Batter missing")
+            logging.error("Battery missing")
 
     def disable_movement(self):
         logging.info("Depowering motors")
@@ -214,7 +214,7 @@ class MovementHelper:
         self.__execute_velocity("backward", v_x=-self.__VELOCITY_BASE_SPEED)
 
     def left(self):
-        self.__execute_velocity("left", v_y=-self.__VELOCITY_BASE_SPEED)
+        self.__execute_velocity("left", v_y=self.__VELOCITY_BASE_SPEED)
 
     def right(self):
         self.__execute_velocity("right", v_y=-self.__VELOCITY_BASE_SPEED)
