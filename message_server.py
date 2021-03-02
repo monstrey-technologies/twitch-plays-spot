@@ -33,8 +33,11 @@ def make_server_handler(movement_callback=None, stat_callback=None):
                 self.end_headers()
                 self.wfile.write(json.dumps(stat_callback(parsed.path[1:])).encode('utf-8'))
             else:
-                print(parsed.path)
+                logging.info(parsed.path)
                 self.send_response(400)
+
+        def log_message(self, formats, *args) -> None:
+            pass
 
     return ServerHandler
 

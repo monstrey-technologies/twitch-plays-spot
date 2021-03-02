@@ -95,7 +95,7 @@ class TwitchPlays:
 
     @staticmethod
     def read_yaml():
-        with open("config.yaml", 'r') as stream:
+        with open("assets/config.yaml", 'r') as stream:
             try:
                 yaml_config = yaml.unsafe_load(stream)
 
