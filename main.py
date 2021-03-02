@@ -1,4 +1,5 @@
-import logging, coloredlogs
+import logging
+import coloredlogs
 import threading
 from dataclasses import dataclass
 
@@ -81,7 +82,7 @@ class TwitchPlays:
 
     def cb_stats(self, stat):
         if stat == "battery" and self.__spot is not None:
-            return {"stat": self.__spot.get_battery()}
+            return {"stat": self.__spot.get_battery_level()}
         elif stat == "viewcount":
             return {"stat": self.__bot.get_chat_count()}
         elif stat == "lastcommand":
