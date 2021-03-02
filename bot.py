@@ -29,7 +29,6 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
 
         threading.Thread(target=self.__chat_analyzer).start()
 
-        # You must request specific capabilities before you can use them
         c.cap('REQ', ':twitch.tv/membership')
         c.cap('REQ', ':twitch.tv/tags')
         c.cap('REQ', ':twitch.tv/commands')
@@ -39,7 +38,6 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         return self.__chat_count
 
     def on_pubmsg(self, c, e):
-        # If a chat message starts with an exclamation point, try to run it as a command
         if e.arguments[0][:1] == '!':
             cmd = e.arguments[0].split(' ')[0][1:]
             self.do_command(e, cmd)
