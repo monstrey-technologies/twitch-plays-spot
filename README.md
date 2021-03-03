@@ -4,6 +4,9 @@
 This code is meant as an example on how to use the python client provided by Boston Dynamic.  
 We use their client to communicate with the Spot and send the commands we receive via Twitch chat to Spot.
 
+## Code overview
+https://www.youtube.com/watch?v=tY4cUSd1iHo
+
 ## Prerequisites
 - Have a Yaml file called config.yaml in your assets folder
 - Have python 3.7 installed
